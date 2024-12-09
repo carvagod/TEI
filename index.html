@@ -3,62 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Asesoría en Gestión del Tiempo</title>
+    <title>Gestión de Horarios</title>
     <style>
         body {
             font-family: Arial, sans-serif;
+            background: #f4f4f9;
             margin: 0;
             padding: 0;
-            background: #f4f4f9;
-            color: #333;
-        }
-        header {
-            background: #6200ea;
-            color: #fff;
-            padding: 1rem;
             text-align: center;
         }
-        section {
-            padding: 2rem;
-        }
-        h1, h2 {
-            color: #6200ea;
-        }
-        .cta-button {
+        form {
             display: inline-block;
-            background: #6200ea;
-            color: #fff;
-            padding: 1rem 2rem;
-            text-decoration: none;
-            border-radius: 5px;
-            margin-top: 1rem;
+            text-align: left;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            border-radius: 8px;
         }
-        .cta-button:hover {
-            background: #3700b3;
-        }
-        footer {
-            text-align: center;
-            padding: 1rem;
-            background: #333;
-            color: #fff;
-            position: fixed;
+        input {
+            display: block;
+            margin-bottom: 10px;
+            padding: 10px;
             width: 100%;
-            bottom: 0;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #6200ea;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            width: 100%;
+            border-radius: 4px;
+        }
+        button:hover {
+            background-color: #3700b3;
+        }
+        .message {
+            margin-top: 10px;
+            color: red;
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Bienvenido a la Asesoría en Gestión del Tiempo</h1>
-        <p>Optimiza tu tiempo y reduce el estrés con nuestros cronogramas personalizados.</p>
-    </header>
-    <section>
-        <h2>¿Qué ofrecemos?</h2>
-        <p>Nuestra plataforma analiza tu carga académica y genera un cronograma optimizado que se adapta a tus necesidades. Olvídate del estrés y empieza a gestionar tu tiempo de manera eficiente.</p>
-        <a href="#" class="cta-button">Descubre más</a>
-    </section>
-    <footer>
-        <p>&copy; 2024 Asesoría en Gestión del Tiempo. Todos los derechos reservados.</p>
-    </footer>
+    <h1>Gestión de Horarios</h1>
+    <p>Optimiza tu tiempo y organiza tus actividades de manera eficiente.</p>
+    <form id="loginForm">
+        <input type="email" id="email" placeholder="Correo Electrónico" required>
+        <input type="password" id="password" placeholder="Contraseña" required>
+        <button type="submit">Iniciar Sesión</button>
+        <p class="message" id="message"></p>
+    </form>
+
+    <script>
+        // URL del archivo JSON (reemplaza con el enlace RAW de tu archivo)
+        const usersJsonUrl = "https://raw.githubusercontent.com/tu-usuario/tu-repositorio/main/users.json";
+
+        const loginForm = document.getElementById("loginForm");
+        const messageElement = document.getElementById("message");
+
+        loginForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+
+            try {
+                // Consultar el archivo JSON
+                const response = await fetch(usersJsonUrl);
+                if (!response.ok) throw new Error("Error al cargar los datos de usuario.");
+                
+                const users = await response.json();
+
+                // Buscar usuario con las credenciales
+                const user = users.find(u => u.email === email && u.password === password);
+
+                if (user) {
+                    messageElement.style.color = "green";
+                    messageElement.textContent = "Inicio de sesión exitoso. Redirigiendo...";
+                    setTimeout(() => {
+                        window.location.href = `dashboard.html?userId=${user.id}&name=${encodeURIComponent(user.name)}`;
+                    }, 2000);
+                } else {
+                    messageElement.style.color = "red";
+                    messageElement.textContent = "Credenciales incorrectas.";
+                }
+            } catch (error) {
+                messageElement.style.color = "red";
+                messageElement.textContent = "Error al conectar con la base de datos.";
+                console.error(error);
+            }
+        });
+    </script>
 </body>
 </html>
