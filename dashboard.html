@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Usuario</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f9;
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Bienvenido, <span id="userName"></span>!</h1>
+    <p>Este es tu panel de usuario. Aquí podrás gestionar tu horario y tus actividades.</p>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const userName = params.get("name");
+
+        if (userName) {
+            document.getElementById("userName").textContent = decodeURIComponent(userName);
+        } else {
+            document.body.innerHTML = "<h1>Acceso denegado. Inicia sesión primero.</h1>";
+        }
+    </script>
+</body>
+</html>
