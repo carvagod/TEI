@@ -5,21 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Horarios</title>
     <style>
+        /* Estilo general */
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Poppins', Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background: #f4f4f9;
+            background: #f9f9f9;
             color: #333;
         }
 
+        /* Encabezado */
         header {
             background: #6200ea;
             color: #fff;
-            padding: 1rem;
-            text-align: center;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
+        header img {
+            height: 50px;
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin: 0;
+            text-transform: uppercase;
+        }
+
+        header p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        /* Sección general */
         section {
             padding: 2rem;
             text-align: center;
@@ -27,6 +48,11 @@
 
         h1, h2 {
             color: #6200ea;
+        }
+
+        p {
+            font-size: 1rem;
+            line-height: 1.6;
         }
 
         .cta-button {
@@ -37,41 +63,47 @@
             text-decoration: none;
             border-radius: 5px;
             margin-top: 1rem;
+            font-size: 1rem;
+            font-weight: bold;
         }
 
         .cta-button:hover {
             background: #3700b3;
         }
 
+        /* Formulario de inicio de sesión */
         .login-form {
             max-width: 400px;
             margin: 2rem auto;
-            padding: 1rem;
+            padding: 1.5rem;
             background: #fff;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
         }
 
         .login-form label {
             display: block;
             margin-bottom: 0.5rem;
+            font-weight: bold;
         }
 
         .login-form input {
             width: 100%;
-            padding: 0.5rem;
+            padding: 0.75rem;
             margin-bottom: 1rem;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
         }
 
         .login-form button {
             width: 100%;
-            padding: 0.5rem;
+            padding: 0.75rem;
             background: #6200ea;
             color: #fff;
             border: none;
-            border-radius: 4px;
+            border-radius: 5px;
+            font-size: 1rem;
             cursor: pointer;
         }
 
@@ -85,31 +117,57 @@
             text-align: center;
         }
 
+        /* Pie de página */
         footer {
             text-align: center;
-            padding: 1rem;
+            padding: 1.5rem;
             background: #333;
             color: #fff;
-            position: relative;
-            bottom: 0;
-            width: 100%;
+            font-size: 0.9rem;
+        }
+
+        footer p {
+            margin: 0.5rem 0;
+        }
+
+        /* Mejoras generales */
+        .content-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Imagen en la cabecera */
+        .header-left img {
+            margin-right: 20px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
         }
     </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
     <header>
-        <h1>Gestión de Horarios</h1>
+        <div class="header-left">
+            <img src="https://startupschool.uai.cl/wp-content/uploads/2022/01/cropped-cropped-cropped-cropped-logo_starup_fondo-blanco-1.png" alt="Logo">
+            <h1>Gestión de Horarios</h1>
+        </div>
         <p>Optimiza tu tiempo y reduce el estrés con nuestros cronogramas personalizados.</p>
     </header>
 
-    <section>
+    <section class="content-wrapper">
         <h2>¿Qué ofrecemos?</h2>
-        <p>Nuestra plataforma analiza tu carga académica y genera un cronograma optimizado que se adapta a tus necesidades. Olvídate del estrés y empieza a gestionar tu tiempo de manera eficiente.</p>
+        <p>
+            Nuestra plataforma analiza tu carga académica y genera un cronograma optimizado que se adapta a tus necesidades. 
+            Olvídate del estrés y empieza a gestionar tu tiempo de manera eficiente.
+        </p>
         <a href="#" class="cta-button">Descubre más</a>
     </section>
 
     <!-- Sección de Inicio de Sesión -->
-    <section>
+    <section class="content-wrapper">
         <h2>Inicio de Sesión</h2>
         <div class="login-form">
             <form id="loginForm">
@@ -125,55 +183,49 @@
 
     <footer>
         <p>&copy; 2024 Gestión de Horarios. Todos los derechos reservados.</p>
+        <p>Proyecto realizado por grupo 7 de la sección 1-V de Taller de Diseño</p>
     </footer>
 
     <script>
-    // URL del archivo JSON (usando el enlace RAW del archivo en GitHub)
-    const usersJsonUrl = "https://raw.githubusercontent.com/carvagod/TEI/refs/heads/main/users.json";
+        // URL del archivo JSON (usando el enlace RAW del archivo en GitHub)
+        const usersJsonUrl = "https://raw.githubusercontent.com/carvagod/TEI/refs/heads/main/users.json";
 
-    const loginForm = document.getElementById("loginForm");
-    const messageElement = document.getElementById("message");
+        const loginForm = document.getElementById("loginForm");
+        const messageElement = document.getElementById("message");
 
-    loginForm.addEventListener("submit", async (e) => {
-        e.preventDefault();
+        loginForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
 
-        const email = document.getElementById("email").value.trim();
-        const password = document.getElementById("password").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value.trim();
 
-        try {
-            // Validar si el enlace JSON responde correctamente
-            const response = await fetch(usersJsonUrl);
+            try {
+                const response = await fetch(usersJsonUrl);
 
-            if (!response.ok) {
-                throw new Error(`Error al cargar el archivo JSON: ${response.statusText}`);
-            }
+                if (!response.ok) {
+                    throw new Error(`Error al cargar el archivo JSON: ${response.statusText}`);
+                }
 
-            // Leer y procesar el contenido del archivo JSON
-            const users = await response.json();
+                const users = await response.json();
 
-            // Buscar el usuario en el archivo JSON
-            const user = users.find(u => u.email === email && u.password === password);
+                const user = users.find(u => u.email === email && u.password === password);
 
-            if (user) {
-                // Usuario encontrado
-                messageElement.style.color = "green";
-                messageElement.textContent = "Inicio de sesión exitoso. Redirigiendo...";
-                setTimeout(() => {
-                    window.location.href = `dashboard.html?userId=${user.id}&name=${encodeURIComponent(user.name)}`;
-                }, 2000);
-            } else {
-                // Usuario no encontrado
+                if (user) {
+                    messageElement.style.color = "green";
+                    messageElement.textContent = "Inicio de sesión exitoso. Redirigiendo...";
+                    setTimeout(() => {
+                        window.location.href = `dashboard.html?userId=${user.id}&name=${encodeURIComponent(user.name)}`;
+                    }, 2000);
+                } else {
+                    messageElement.style.color = "red";
+                    messageElement.textContent = "Credenciales incorrectas. Verifica tu correo o contraseña.";
+                }
+            } catch (error) {
                 messageElement.style.color = "red";
-                messageElement.textContent = "Credenciales incorrectas. Verifica tu correo o contraseña.";
+                messageElement.textContent = "Error al conectar con la base de datos. Intenta más tarde.";
+                console.error("Error de conexión o procesamiento:", error);
             }
-        } catch (error) {
-            // Error al conectar con la base de datos
-            messageElement.style.color = "red";
-            messageElement.textContent = "Error al conectar con la base de datos. Intenta más tarde.";
-            console.error("Error de conexión o procesamiento:", error);
-        }
-    });
-</script>
-
+        });
+    </script>
 </body>
 </html>
