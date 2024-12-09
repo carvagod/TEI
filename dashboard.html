@@ -47,11 +47,7 @@
     if (userName) {
         document.getElementById("userName").textContent = decodeURIComponent(userName);
 
-        // Función para mapear días de la semana a columnas
-        const diasSemana = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
-        const bloquesDia = 12;
-
-        // Crear tabla de horarios disponibles
+        // Función para crear la tabla vacía
         function crearTablaHorarios() {
             const table = document.createElement("table");
             table.style.margin = "20px auto";
@@ -65,6 +61,7 @@
             emptyCell.textContent = "Bloque";
             headerRow.appendChild(emptyCell);
 
+            const diasSemana = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
             diasSemana.forEach(dia => {
                 const th = document.createElement("th");
                 th.textContent = dia;
@@ -78,7 +75,7 @@
             table.appendChild(headerRow);
 
             // Crear filas de bloques (1-12)
-            for (let i = 1; i <= bloquesDia; i++) {
+            for (let i = 1; i <= 12; i++) {
                 const row = document.createElement("tr");
 
                 // Primera celda: número del bloque
@@ -89,7 +86,7 @@
                 blockCell.style.backgroundColor = "#f4f4f9";
                 row.appendChild(blockCell);
 
-                // Celdas para cada día
+                // Celdas vacías para cada día
                 for (let j = 0; j < diasSemana.length; j++) {
                     const cell = document.createElement("td");
                     cell.style.border = "1px solid #ccc";
@@ -104,41 +101,31 @@
             return table;
         }
 
-        // Completar la tabla con datos del CSV
+        // Función para llenar la tabla con datos del CSV
         function llenarTablaHorarios(table, horarios) {
             const rows = table.querySelectorAll("tr");
+            const diasSemana = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
 
             horarios.forEach(horario => {
-                const [id, ramo, seccion, ...bloques] = horario.split(",");
+                const [id, ramo, seccion, ...horariosBloques] = horario.split(",");
+                if (id !== userId) return; // Verificar si el ID coincide con el usuario
 
-                // Verificar si el ID coincide con el usuario
-                if (id !== userId) return;
+                for (let i = 0; i < horariosBloques.length; i += 2) {
+                    const dia = horariosBloques[i]?.trim();
+                    const bloque = parseInt(horariosBloques[i + 1]?.trim(), 10);
 
-                bloques.forEach(bloque => {
-                    if (!bloque.trim()) return; // Ignorar bloques vacíos
+                    if (dia && bloque && diasSemana.includes(dia)) {
+                        const diaIndex = diasSemana.indexOf(dia) + 1; // +1 porque la primera columna es el número de bloque
+                        const cell = rows[bloque].children[diaIndex];
 
-                    // Extraer día y bloque del formato (e.g., "Lunes 1-2")
-                    const [dia, rango] = bloque.split(" ");
-                    if (!dia || !rango) return;
-
-                    const diaIndex = diasSemana.indexOf(dia);
-                    if (diaIndex === -1) return;
-
-                    const [inicio, fin] = rango.split("-").map(Number);
-
-                    // Completar las celdas correspondientes
-                    for (let i = inicio; i <= fin; i++) {
-                        const cell = rows[i].children[diaIndex + 1]; // +1 porque la primera columna es el número de bloque
                         const contenido = `${ramo} (Sección ${seccion})`;
-
                         if (cell.textContent.trim()) {
-                            // Si ya hay contenido, añadirlo separado por un punto aparte
                             cell.textContent += ` // ${contenido}`;
                         } else {
                             cell.textContent = contenido;
                         }
                     }
-                });
+                }
             });
         }
 
