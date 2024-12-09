@@ -38,16 +38,75 @@
     <footer>
         <p>&copy; 2024 Gestión de Horarios. Todos los derechos reservados.</p>
     </footer>
-
     <script>
-        const params = new URLSearchParams(window.location.search);
-        const userName = params.get("name");
+    const params = new URLSearchParams(window.location.search);
+    const userName = params.get("name");
+    const userId = params.get("userId");
+    const csvUrl = "https://raw.githubusercontent.com/carvagod/TEI/refs/heads/main/horarios.csv"; // Cambia por el enlace RAW de tu CSV
 
-        if (userName) {
-            document.getElementById("userName").textContent = decodeURIComponent(userName);
-        } else {
-            document.body.innerHTML = "<h1>Acceso denegado. Inicia sesión primero.</h1>";
-        }
+    if (userName) {
+        document.getElementById("userName").textContent = decodeURIComponent(userName);
+
+        // Cargar el CSV y mostrar la información
+        fetch(csvUrl)
+            .then(response => {
+                if (!response.ok) throw new Error("Error al cargar los datos del CSV.");
+                return response.text();
+            })
+            .then(data => {
+                const rows = data.split("\n").slice(1); // Omitir la primera fila (encabezados)
+                const userSchedules = rows.filter(row => row.startsWith(`${userId},`)); // Filtrar por ID del usuario
+
+                if (userSchedules.length > 0) {
+                    const table = document.createElement("table");
+                    table.style.margin = "20px auto";
+                    table.style.borderCollapse = "collapse";
+                    table.style.width = "80%";
+
+                    // Crear encabezados
+                    const headerRow = document.createElement("tr");
+                    const headers = ["Ramo", "Horario", "Evaluaciones"];
+                    headers.forEach(headerText => {
+                        const th = document.createElement("th");
+                        th.textContent = headerText;
+                        th.style.border = "1px solid #ccc";
+                        th.style.padding = "8px";
+                        th.style.backgroundColor = "#6200ea";
+                        th.style.color = "#fff";
+                        headerRow.appendChild(th);
+                    });
+                    table.appendChild(headerRow);
+
+                    // Crear filas con los datos
+                    userSchedules.forEach(schedule => {
+                        const columns = schedule.split(",");
+                        const row = document.createElement("tr");
+                        columns.slice(1).forEach(text => { // Omitir la primera columna (ID)
+                            const td = document.createElement("td");
+                            td.textContent = text;
+                            td.style.border = "1px solid #ccc";
+                            td.style.padding = "8px";
+                            td.style.textAlign = "center";
+                            row.appendChild(td);
+                        });
+                        table.appendChild(row);
+                    });
+
+                    document.body.appendChild(table);
+                } else {
+                    document.body.innerHTML += "<p>No se encontraron horarios disponibles.</p>";
+                }
+            })
+            .catch(error => {
+                console.error(error);
+                document.body.innerHTML += "<p>Error al cargar los horarios. Intenta más tarde.</p>";
+            });
+    } else {
+        document.body.innerHTML = "<h1>Acceso denegado. Inicia sesión primero.</h1>";
+    }
     </script>
+
+    
+      
 </body>
 </html>
