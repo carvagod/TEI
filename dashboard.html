@@ -8,14 +8,36 @@
         body {
             font-family: Arial, sans-serif;
             background: #f4f4f9;
+            margin: 0;
             padding: 20px;
             text-align: center;
+        }
+        header {
+            background: #6200ea;
+            color: #fff;
+            padding: 1rem;
+        }
+        h1 {
+            color: #6200ea;
+        }
+        footer {
+            background: #333;
+            color: #fff;
+            padding: 1rem;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
         }
     </style>
 </head>
 <body>
-    <h1>Bienvenido, <span id="userName"></span>!</h1>
-    <p>Este es tu panel de usuario. Aquí podrás gestionar tu horario y tus actividades.</p>
+    <header>
+        <h1>Bienvenido, <span id="userName"></span>!</h1>
+    </header>
+    <p>Aquí puedes gestionar tus horarios y tareas pendientes.</p>
+    <footer>
+        <p>&copy; 2024 Gestión de Horarios. Todos los derechos reservados.</p>
+    </footer>
 
     <script>
         const params = new URLSearchParams(window.location.search);
