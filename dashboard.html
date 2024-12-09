@@ -49,18 +49,25 @@
 
         // Función para crear la tabla vacía
         function crearTablaHorarios() {
+            const tableContainer = document.createElement("div");
+            tableContainer.style.overflowY = "auto";
+            tableContainer.style.maxHeight = "500px";
+            tableContainer.style.margin = "20px auto";
+            tableContainer.style.border = "1px solid #ccc";
+            tableContainer.style.borderRadius = "5px";
+            tableContainer.style.backgroundColor = "#fff";
+        
             const table = document.createElement("table");
-            table.style.margin = "20px auto";
             table.style.borderCollapse = "collapse";
-            table.style.width = "80%";
+            table.style.width = "100%";
             table.style.textAlign = "center";
-
+        
             // Crear encabezados (días de la semana)
             const headerRow = document.createElement("tr");
             const emptyCell = document.createElement("th");
             emptyCell.textContent = "Bloque";
             headerRow.appendChild(emptyCell);
-
+        
             const diasSemana = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
             diasSemana.forEach(dia => {
                 const th = document.createElement("th");
@@ -71,13 +78,13 @@
                 th.style.color = "#fff";
                 headerRow.appendChild(th);
             });
-
+        
             table.appendChild(headerRow);
-
+        
             // Crear filas de bloques (1-12)
             for (let i = 1; i <= 12; i++) {
                 const row = document.createElement("tr");
-
+        
                 // Primera celda: número del bloque
                 const blockCell = document.createElement("td");
                 blockCell.textContent = i;
@@ -85,7 +92,7 @@
                 blockCell.style.padding = "8px";
                 blockCell.style.backgroundColor = "#f4f4f9";
                 row.appendChild(blockCell);
-
+        
                 // Celdas vacías para cada día
                 for (let j = 0; j < diasSemana.length; j++) {
                     const cell = document.createElement("td");
@@ -94,30 +101,33 @@
                     cell.style.minHeight = "50px";
                     row.appendChild(cell);
                 }
-
+        
                 table.appendChild(row);
             }
-
-            return table;
+        
+            tableContainer.appendChild(table);
+            return tableContainer;
         }
 
+
         // Función para llenar la tabla con datos del CSV
-        function llenarTablaHorarios(table, horarios) {
+        function llenarTablaHorarios(tableContainer, horarios) {
+            const table = tableContainer.querySelector("table");
             const rows = table.querySelectorAll("tr");
             const diasSemana = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
-
+        
             horarios.forEach(horario => {
                 const [id, ramo, seccion, ...horariosBloques] = horario.split(",");
-                if (id !== userId) return; // Verificar si el ID coincide con el usuario
-
+                if (id.trim() !== userId) return; // Verificar si el ID coincide con el usuario
+        
                 for (let i = 0; i < horariosBloques.length; i += 2) {
                     const dia = horariosBloques[i]?.trim();
                     const bloque = parseInt(horariosBloques[i + 1]?.trim(), 10);
-
+        
                     if (dia && bloque && diasSemana.includes(dia)) {
                         const diaIndex = diasSemana.indexOf(dia) + 1; // +1 porque la primera columna es el número de bloque
                         const cell = rows[bloque].children[diaIndex];
-
+        
                         const contenido = `${ramo} (Sección ${seccion})`;
                         if (cell.textContent.trim()) {
                             cell.textContent += ` // ${contenido}`;
@@ -137,18 +147,16 @@
             })
             .then(data => {
                 const horarios = data.split("\n").slice(1).filter(row => row); // Omitir encabezados y filas vacías
-
-                const table = crearTablaHorarios();
-                llenarTablaHorarios(table, horarios);
-                document.body.appendChild(table);
+        
+                const tableContainer = crearTablaHorarios();
+                llenarTablaHorarios(tableContainer, horarios);
+                document.body.appendChild(tableContainer);
             })
             .catch(error => {
                 console.error(error);
                 document.body.innerHTML += "<p>Error al cargar los horarios. Intenta más tarde.</p>";
             });
-    } else {
-        document.body.innerHTML = "<h1>Acceso denegado. Inicia sesión primero.</h1>";
-    }
+
     </script>
 
 
