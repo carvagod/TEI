@@ -237,5 +237,213 @@
             window.location.href = "index.html";
         }
     </script>
+<script>
+    // Función para analizar y generar combinaciones sin conflictos
+    function generarCombinacionesSinTopes(horarios) {
+        const diasSemana = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
+
+        // Agrupar horarios por ramo y secciones
+        const ramos = {};
+        horarios.forEach(horario => {
+            const [id, ramo, seccion, ...horariosBloques] = horario.split(",");
+            if (!ramos[ramo]) ramos[ramo] = [];
+            ramos[ramo].push({
+                seccion: seccion.trim(),
+                bloques: horariosBloques.reduce((acc, _, i) => {
+                    if (i % 2 === 0) {
+                        const dia = horariosBloques[i]?.trim();
+                        const bloque = parseInt(horariosBloques[i + 1]?.trim(), 10);
+                        if (dia && bloque) acc.push({ dia, bloque });
+                    }
+                    return acc;
+                }, [])
+            });
+        });
+
+        // Generar combinaciones sin conflictos
+        const combinaciones = [];
+        function backtrack(combinacionActual, ramosRestantes) {
+            if (ramosRestantes.length === 0) {
+                combinaciones.push([...combinacionActual]);
+                return;
+            }
+
+            const [ramoActual, ...restoRamos] = ramosRestantes;
+            for (const seccion of ramos[ramoActual]) {
+                // Verificar si hay conflictos con la combinación actual
+                const hayConflicto = combinacionActual.some(combinacion => {
+                    return combinacion.bloques.some(bloqueA =>
+                        seccion.bloques.some(bloqueB => bloqueA.dia === bloqueB.dia && bloqueA.bloque === bloqueB.bloque)
+                    );
+                });
+
+                if (!hayConflicto) {
+                    combinacionActual.push({ ramo: ramoActual, ...seccion });
+                    backtrack(combinacionActual, restoRamos);
+                    combinacionActual.pop();
+                }
+            }
+        }
+
+        backtrack([], Object.keys(ramos));
+        return combinaciones;
+    }
+
+    // Crear una tabla para mostrar una combinación
+    function crearTablaCombinacion(combinacion, indice) {
+        const tableContainer = document.createElement("div");
+        tableContainer.className = "table-container";
+        tableContainer.dataset.index = indice; // Agregar índice para identificar la tabla
+
+        const tableTitle = document.createElement("div");
+        tableTitle.className = "table-title";
+        tableTitle.textContent = `Posible combinación ${indice}`;
+
+        const table = document.createElement("table");
+        const headerRow = document.createElement("tr");
+        const emptyCell = document.createElement("th");
+        emptyCell.textContent = "Bloque";
+        headerRow.appendChild(emptyCell);
+
+        const diasSemana = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
+        diasSemana.forEach(dia => {
+            const th = document.createElement("th");
+            th.textContent = dia;
+            headerRow.appendChild(th);
+        });
+
+        table.appendChild(headerRow);
+
+        for (let i = 1; i <= 12; i++) {
+            const row = document.createElement("tr");
+
+            const blockCell = document.createElement("td");
+            blockCell.textContent = i;
+            row.appendChild(blockCell);
+
+            for (let j = 0; j < diasSemana.length; j++) {
+                const cell = document.createElement("td");
+                row.appendChild(cell);
+            }
+
+            table.appendChild(row);
+        }
+
+        // Llenar la tabla con la combinación
+        const rows = table.querySelectorAll("tr");
+        combinacion.forEach(({ ramo, seccion, bloques }) => {
+            bloques.forEach(({ dia, bloque }) => {
+                const diaIndex = diasSemana.indexOf(dia) + 1; // +1 porque la primera columna es el número de bloque
+                const cell = rows[bloque].children[diaIndex];
+                cell.textContent = `${ramo} (Sección ${seccion})`;
+            });
+        });
+
+        tableContainer.appendChild(tableTitle);
+        tableContainer.appendChild(table);
+        return tableContainer;
+    }
+
+    // Calcular ventanas de una tabla
+    function calcularVentanas(table) {
+        const rows = table.querySelectorAll("tr");
+        const diasSemana = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
+        let totalVentanas = 0;
+
+        for (let diaIndex = 1; diaIndex <= diasSemana.length; diaIndex++) {
+            let bloquesDia = [];
+            for (let bloque = 1; bloque <= 12; bloque++) {
+                const cell = rows[bloque].children[diaIndex];
+                if (cell.textContent.trim()) {
+                    bloquesDia.push(bloque);
+                }
+            }
+
+            // Calcular ventanas en este día
+            for (let i = 0; i < bloquesDia.length - 1; i++) {
+                const ventana = bloquesDia[i + 1] - bloquesDia[i] - 1;
+                totalVentanas += ventana > 0 ? ventana : 0;
+            }
+        }
+
+        return totalVentanas;
+    }
+
+    // Función para mostrar combinaciones y determinar la mejor
+    function mostrarCombinaciones(horarios) {
+        const combinaciones = generarCombinacionesSinTopes(horarios);
+        const combinacionTablas = [];
+
+        combinaciones.forEach((combinacion, index) => {
+            const tableContainer = crearTablaCombinacion(combinacion, index + 1);
+            document.body.appendChild(tableContainer);
+            combinacionTablas.push({ table: tableContainer.querySelector("table"), container: tableContainer });
+        });
+
+        if (combinacionTablas.length === 0) {
+            const noCombinationsMessage = document.createElement("p");
+            noCombinationsMessage.textContent = "No hay combinaciones posibles sin conflictos de horarios.";
+            document.body.appendChild(noCombinationsMessage);
+            return;
+        }
+
+        // Calcular ventanas y determinar la mejor combinación
+        let mejorIndice = 0;
+        let menorVentanas = Infinity;
+
+        combinacionTablas.forEach((tabla, index) => {
+            const ventanas = calcularVentanas(tabla.table);
+            if (ventanas < menorVentanas) {
+                menorVentanas = ventanas;
+                mejorIndice = index;
+            }
+        });
+
+        // Marcar la mejor combinación
+        const mejorTabla = combinacionTablas[mejorIndice].container;
+        const titulo = mejorTabla.querySelector(".table-title");
+        titulo.textContent += ": Mejor combinación";
+    }
+
+    // Cargar y procesar los horarios
+    fetch(horariosCsvUrl)
+        .then(response => {
+            if (!response.ok) throw new Error("Error al cargar los datos del CSV.");
+            return response.text();
+        })
+        .then(data => {
+            const horarios = data.split("\n").slice(1).filter(row => row); // Omitir encabezados y filas vacías
+            mostrarCombinaciones(horarios);
+        })
+        .catch(error => {
+            console.error(error);
+            document.body.innerHTML += "<p>Error al procesar las combinaciones. Intenta más tarde.</p>";
+        });
+    </script>
+
+    <script>
+        function toggleSettings() {
+            const popup = document.getElementById('settingsPopup');
+            popup.style.display = popup.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function logout() {
+            alert('Sesión cerrada');
+            window.location.href = 'index.html';
+        }
+
+        // Simulación: Generar horarios en la tabla
+        function generateTableContent() {
+            const tableBody = document.querySelector('#horariosTable tbody');
+            for (let i = 1; i <= 12; i++) {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td>${i}</td>` + '<td></td>'.repeat(7);
+                tableBody.appendChild(row);
+            }
+        }
+
+        // Ejecutar la generación al cargar
+        document.addEventListener('DOMContentLoaded', generateTableContent);
+    </script>
 </body>
 </html>
