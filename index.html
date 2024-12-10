@@ -178,7 +178,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1>Gestión de Horarios</h1>
+    <header>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/2/29/Escude_de_la_Universidad_Adolfo_Iba%C3%B1ez.png" alt="Logo UAI">
+        <div>
+            <h1>Gestión de Horarios</h1>
+            <p>Optimiza tu tiempo y reduce el estrés con nuestros cronogramas personalizados.</p>
+        </div>
+        <img src="https://startupschool.uai.cl/wp-content/uploads/2022/01/cropped-cropped-cropped-cropped-logo_starup_fondo-blanco-1.png" alt="Logo Startup">
+    </header>
+    
     <div class="login-form">
         <h2>Inicio de Sesión</h2>
         <form id="loginForm">
@@ -190,6 +198,38 @@
             <p id="message" class="message"></p>
         </form>
     </div>
+
+    <div class="ofrecemos-container" id="ofrecemosContainer">
+        <h2>¿Qué ofrecemos?</h2>
+        <p>
+            Nuestra plataforma analiza tu carga académica y genera un cronograma optimizado que se adapta a tus necesidades. 
+            Olvídate del estrés y empieza a gestionar tu tiempo de manera eficiente.
+        </p>
+        <a href="#" class="cta-button">Descubre más</a>
+    </div>
+
+    <div class="toggle-button" id="toggleButton">▶</div>
+
+    <footer>
+        <p>&copy; 2024 Gestión de Horarios. Todos los derechos reservados.</p>
+        <p>Proyecto realizado por el grupo 7, sección 1, de Taller de Diseño, Viña del Mar.</p>
+        <div class="social-icons">
+            <a href="https://instagram.com"><img src="https://img.icons8.com/m_outlined/512/FFFFFF/instagram-new.png" alt="Instagram"></a>
+            <a href="https://whatsapp.com"><img src="https://img.icons8.com/ios11/512/FFFFFF/whatsapp.png" alt="WhatsApp"></a>
+            <a href="mailto:example@gmail.com"><img src="https://img.icons8.com/ios7/600/FFFFFF/gmail.png" alt="Email"></a>
+        </div>
+    </footer>
+
+     <script>
+        const toggleButton = document.getElementById("toggleButton");
+        const ofrecemosContainer = document.getElementById("ofrecemosContainer");
+
+        toggleButton.addEventListener("click", () => {
+            const isOpen = ofrecemosContainer.classList.toggle("open");
+            toggleButton.textContent = isOpen ? "◀" : "▶";
+        });
+    </script>
+
 
     <script>
         // URL del archivo JSON
