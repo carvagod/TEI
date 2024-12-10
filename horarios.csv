@@ -1,9 +1,7 @@
-ID,Ramo,Sección,Horario 1,Bloque 1,Horario 2,Bloque 2,Horario 3,Bloque 3,Horario 4,Bloque 4
-1,MAT301,1,Lunes,1,Miércoles,2,Viernes,3,,
-1,MAT301,2,Lunes,4,Miércoles,6,Viernes,9,,
-1,TEI201,1,Lunes,4,Miércoles,5,Viernes,6,,
-1,TEI201,2,Lunes,1,Miércoles,6,Viernes,9,,
-1,CORE201,1,Lunes,7,Miércoles,8,Viernes,9,,
-1,CORE201,2,Lunes,4,Miércoles,6,Viernes,3,,
-
-
+ID,Ramo,Sección,Horario 1,Bloque 1,Horario 2,Bloque 2,Horario 3,Bloque 3
+1,MAT301,1,Lunes,1,Miércoles,2,Viernes,3
+1,MAT301,2,Lunes,4,Miércoles,6,Viernes,9
+1,TEI201,1,Lunes,4,Miércoles,5,Viernes,6
+1,TEI201,2,Lunes,1,Miércoles,6,Viernes,9
+1,CORE201,1,Lunes,7,Miércoles,8,Viernes,9
+1,CORE201,2,Lunes,4,Miércoles,6,Viernes,3
