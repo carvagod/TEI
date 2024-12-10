@@ -3,281 +3,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestión de Horarios</title>
+    <title>Inicio de Sesión</title>
     <style>
         /* Estilo general */
         body {
-            font-family: 'Poppins', Arial, sans-serif;
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background: url('https://ingenieria.uai.cl/assets/uploads/2019/09/uai-047b.jpg') no-repeat center center fixed;
-            background-size: cover;
-            color: #333;
-        }
-
-        /* Encabezado */
-        header {
-            background: rgba(255, 255, 255, 0.8);
+            background-color: #f4f4f9;
             display: flex;
+            flex-direction: column;
+            justify-content: center;
             align-items: center;
-            justify-content: space-between;
-            padding: 1rem 2rem;
+            height: 100vh;
         }
 
-        header img {
-            height: 80px;
-        }
-
-        header div {
-            text-align: center;
-            flex-grow: 1;
-        }
-
-        header h1 {
-            font-size: 2.5rem;
-            font-weight: bold;
-            margin: 0;
+        h1 {
             color: #333;
-        }
-
-        header p {
-            font-size: 1.2rem;
-            margin: 0.5rem 0;
-            color: #666;
-        }
-
-        /* Pop-up de Qué ofrecemos */
-        .ofrecemos-container {
-            position: fixed;
-            top: 50%;
-            right: -400px;
-            transform: translateY(-50%);
-            background: rgba(255, 255, 255, 0.9);
-            padding: 1.5rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            max-width: 400px;
-            transition: right 0.5s ease;
-        }
-
-        .ofrecemos-container.open {
-            right: 20px;
-        }
-
-        .ofrecemos-container h2 {
-            font-size: 1.8rem;
-            margin-bottom: 1rem;
-            color: #333;
-        }
-
-        .ofrecemos-container p {
-            font-size: 1rem;
-            line-height: 1.6;
-            color: #444;
-        }
-
-        .ofrecemos-container .cta-button {
-            display: block;
-            background: #888;
-            color: #fff;
-            padding: 0.75rem 1.5rem;
-            text-align: center;
-            text-decoration: none;
-            border-radius: 5px;
-            margin-top: 1rem;
-            font-size: 1rem;
-            font-weight: bold;
-        }
-
-        .cta-button:hover {
-            background: #555;
-        }
-
-        .toggle-button {
-            position: fixed;
-            top: 50%;
-            right: 20px;
-            transform: translateY(-50%);
-            background: #888;
-            color: #fff;
-            padding: 0.5rem 1rem;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 1.5rem;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Formulario de inicio de sesión */
-        .login-form-container {
-            text-align: center;
-            margin-top: 3rem;
         }
 
         .login-form {
-            background: rgba(255, 255, 255, 0.9);
-            max-width: 400px;
-            margin: auto;
-            padding: 1.5rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+
+        .login-form h2 {
+            margin-bottom: 20px;
+            color: #333;
         }
 
         .login-form label {
             display: block;
-            margin-bottom: 0.5rem;
+            margin-bottom: 5px;
             font-weight: bold;
         }
 
         .login-form input {
-            width: calc(100% - 1rem);
-            padding: 0.75rem;
-            margin-bottom: 1rem;
-            border: 1px solid #ddd;
+            width: calc(100% - 10px);
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
             border-radius: 5px;
-            font-size: 1rem;
         }
 
         .login-form button {
             width: 100%;
-            padding: 0.75rem;
-            background: #888;
-            color: #fff;
+            padding: 10px;
+            background: #6200ea;
+            color: #ffffff;
             border: none;
             border-radius: 5px;
-            font-size: 1rem;
             cursor: pointer;
+            font-size: 16px;
         }
 
         .login-form button:hover {
-            background: #555;
+            background: #3700b3;
         }
 
-        /* Pie de página */
-        footer {
-            text-align: center;
-            padding: 1.5rem;
-            background: rgba(0, 0, 0, 0.7);
-            color: #fff;
-            font-size: 0.9rem;
-        }
-
-        footer p {
-            margin: 0.5rem 0;
-        }
-
-        footer .social-icons img {
-            height: 30px;
-            margin: 0 10px;
-            cursor: pointer;
-        }
-
-        footer .social-icons {
+        .message {
             margin-top: 10px;
+            font-size: 14px;
+            text-align: center;
         }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header>
-        <img src="https://upload.wikimedia.org/wikipedia/commons/2/29/Escude_de_la_Universidad_Adolfo_Iba%C3%B1ez.png" alt="Logo UAI">
-        <div>
-            <h1>Gestión de Horarios</h1>
-            <p>Optimiza tu tiempo y reduce el estrés con nuestros cronogramas personalizados.</p>
-        </div>
-        <img src="https://startupschool.uai.cl/wp-content/uploads/2022/01/cropped-cropped-cropped-cropped-logo_starup_fondo-blanco-1.png" alt="Logo Startup">
-    </header>
-
-    <div class="login-form-container">
-        <div class="login-form">
-            <h2>Inicio de Sesión</h2>
-            <form id="loginForm">
-                <label for="email">Correo Electrónico:</label>
-                <input type="email" id="email" placeholder="Ingrese su correo" required>
-                <label for="password">Contraseña:</label>
-                <input type="password" id="password" placeholder="Ingrese su contraseña" required>
-                <button type="submit">Iniciar Sesión</button>
-            </form>
-        </div>
+    <h1>Gestión de Horarios</h1>
+    <div class="login-form">
+        <h2>Inicio de Sesión</h2>
+        <form id="loginForm">
+            <label for="email">Correo Electrónico:</label>
+            <input type="email" id="email" placeholder="Ingrese su correo" required>
+            <label for="password">Contraseña:</label>
+            <input type="password" id="password" placeholder="Ingrese su contraseña" required>
+            <button type="submit">Iniciar Sesión</button>
+            <p id="message" class="message"></p>
+        </form>
     </div>
 
-    <div class="ofrecemos-container" id="ofrecemosContainer">
-        <h2>¿Qué ofrecemos?</h2>
-        <p>
-            Nuestra plataforma analiza tu carga académica y genera un cronograma optimizado que se adapta a tus necesidades. 
-            Olvídate del estrés y empieza a gestionar tu tiempo de manera eficiente.
-        </p>
-        <a href="#" class="cta-button">Descubre más</a>
-    </div>
-
-    <div class="toggle-button" id="toggleButton">▶</div>
-
-    <footer>
-        <p>&copy; 2024 Gestión de Horarios. Todos los derechos reservados.</p>
-        <p>Proyecto realizado por el grupo 7, sección 1, de Taller de Diseño, Viña del Mar.</p>
-        <div class="social-icons">
-            <a href="https://instagram.com"><img src="https://img.icons8.com/m_outlined/512/FFFFFF/instagram-new.png" alt="Instagram"></a>
-            <a href="https://whatsapp.com"><img src="https://img.icons8.com/ios11/512/FFFFFF/whatsapp.png" alt="WhatsApp"></a>
-            <a href="mailto:example@gmail.com"><img src="https://img.icons8.com/ios7/600/FFFFFF/gmail.png" alt="Email"></a>
-        </div>
-    </footer>
-
     <script>
-        const toggleButton = document.getElementById("toggleButton");
-        const ofrecemosContainer = document.getElementById("ofrecemosContainer");
-
-        toggleButton.addEventListener("click", () => {
-            const isOpen = ofrecemosContainer.classList.toggle("open");
-            toggleButton.textContent = isOpen ? "◀" : "▶";
-        });
-    </script>
-
-    <script>
-        // URL del archivo JSON (usando el enlace RAW del archivo en GitHub)
+        // URL del archivo JSON
         const usersJsonUrl = "https://raw.githubusercontent.com/carvagod/TEI/refs/heads/main/users.json";
-    
+
+        // Elementos del formulario
         const loginForm = document.getElementById("loginForm");
         const messageElement = document.getElementById("message");
-    
+
+        // Evento de envío del formulario
         loginForm.addEventListener("submit", async (e) => {
             e.preventDefault();
-    
+
             const email = document.getElementById("email").value.trim();
             const password = document.getElementById("password").value.trim();
-    
+
             try {
-                // Validar si el enlace JSON responde correctamente
+                // Consultar la base de datos JSON
                 const response = await fetch(usersJsonUrl);
-    
+
                 if (!response.ok) {
-                    throw new Error(`Error al cargar el archivo JSON: ${response.statusText}`);
+                    throw new Error(`Error al cargar la base de datos: ${response.statusText}`);
                 }
-    
-                // Leer y procesar el contenido del archivo JSON
+
                 const users = await response.json();
-    
-                // Buscar el usuario en el archivo JSON
+
+                // Buscar usuario por email y contraseña
                 const user = users.find(u => u.email === email && u.password === password);
-    
+
                 if (user) {
-                    // Usuario encontrado
+                    // Credenciales correctas
                     messageElement.style.color = "green";
                     messageElement.textContent = "Inicio de sesión exitoso. Redirigiendo...";
                     setTimeout(() => {
+                        // Redirigir a dashboard.html con parámetros en la URL
                         window.location.href = `dashboard.html?userId=${user.id}&name=${encodeURIComponent(user.name)}`;
                     }, 2000);
                 } else {
-                    // Usuario no encontrado
+                    // Credenciales incorrectas
                     messageElement.style.color = "red";
-                    messageElement.textContent = "Credenciales incorrectas. Verifica tu correo o contraseña.";
+                    messageElement.textContent = "Credenciales incorrectas. Verifica tu correo y contraseña.";
                 }
             } catch (error) {
-                // Error al conectar con la base de datos
+                // Error en la conexión o carga del archivo JSON
                 messageElement.style.color = "red";
                 messageElement.textContent = "Error al conectar con la base de datos. Intenta más tarde.";
-                console.error("Error de conexión o procesamiento:", error);
+                console.error(error);
             }
         });
     </script>
-    
 </body>
 </html>
