@@ -231,52 +231,52 @@
         });
     </script>
 
-<script>
-    // URL del archivo JSON (usando el enlace RAW del archivo en GitHub)
-    const usersJsonUrl = "https://raw.githubusercontent.com/carvagod/TEI/refs/heads/main/users.json";
-
-    const loginForm = document.getElementById("loginForm");
-    const messageElement = document.getElementById("message");
-
-    loginForm.addEventListener("submit", async (e) => {
-        e.preventDefault();
-
-        const email = document.getElementById("email").value.trim();
-        const password = document.getElementById("password").value.trim();
-
-        try {
-            // Validar si el enlace JSON responde correctamente
-            const response = await fetch(usersJsonUrl);
-
-            if (!response.ok) {
-                throw new Error(`Error al cargar el archivo JSON: ${response.statusText}`);
-            }
-
-            // Leer y procesar el contenido del archivo JSON
-            const users = await response.json();
-
-            // Buscar el usuario en el archivo JSON
-            const user = users.find(u => u.email === email && u.password === password);
-
-            if (user) {
-                // Usuario encontrado
-                messageElement.style.color = "green";
-                messageElement.textContent = "Inicio de sesión exitoso. Redirigiendo...";
-                setTimeout(() => {
-                    window.location.href = `dashboard.html?userId=${user.id}&name=${encodeURIComponent(user.name)}`;
-                }, 2000);
-            } else {
-                // Usuario no encontrado
+    <script>
+        // URL del archivo JSON (usando el enlace RAW del archivo en GitHub)
+        const usersJsonUrl = "https://raw.githubusercontent.com/carvagod/TEI/refs/heads/main/users.json";
+    
+        const loginForm = document.getElementById("loginForm");
+        const messageElement = document.getElementById("message");
+    
+        loginForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+    
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value.trim();
+    
+            try {
+                // Validar si el enlace JSON responde correctamente
+                const response = await fetch(usersJsonUrl);
+    
+                if (!response.ok) {
+                    throw new Error(`Error al cargar el archivo JSON: ${response.statusText}`);
+                }
+    
+                // Leer y procesar el contenido del archivo JSON
+                const users = await response.json();
+    
+                // Buscar el usuario en el archivo JSON
+                const user = users.find(u => u.email === email && u.password === password);
+    
+                if (user) {
+                    // Usuario encontrado
+                    messageElement.style.color = "green";
+                    messageElement.textContent = "Inicio de sesión exitoso. Redirigiendo...";
+                    setTimeout(() => {
+                        window.location.href = `dashboard.html?userId=${user.id}&name=${encodeURIComponent(user.name)}`;
+                    }, 2000);
+                } else {
+                    // Usuario no encontrado
+                    messageElement.style.color = "red";
+                    messageElement.textContent = "Credenciales incorrectas. Verifica tu correo o contraseña.";
+                }
+            } catch (error) {
+                // Error al conectar con la base de datos
                 messageElement.style.color = "red";
-                messageElement.textContent = "Credenciales incorrectas. Verifica tu correo o contraseña.";
+                messageElement.textContent = "Error al conectar con la base de datos. Intenta más tarde.";
+                console.error("Error de conexión o procesamiento:", error);
             }
-        } catch (error) {
-            // Error al conectar con la base de datos
-            messageElement.style.color = "red";
-            messageElement.textContent = "Error al conectar con la base de datos. Intenta más tarde.";
-            console.error("Error de conexión o procesamiento:", error);
-        }
-    });
+        });
     </script>
     
 </body>
